@@ -152,6 +152,89 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-智能车电磁" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/07/12/%E6%99%BA%E8%83%BD%E8%BD%A6%E7%94%B5%E7%A3%81/">智能车电磁 -常更新</a>
+    </h1>
+  
+
+        
+        <a href="/2020/07/12/%E6%99%BA%E8%83%BD%E8%BD%A6%E7%94%B5%E7%A3%81/" class="archive-article-date">
+  	<time datetime="2020-07-12T11:52:13.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-07-12</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><u>本篇文章一直更新，有问题留言 QQ 1435020085 看到会将问题更新在博客中</u></p>
+<h1 id="电磁部分"><a href="#电磁部分" class="headerlink" title="电磁部分:"></a>电磁部分:</h1><p>1.完成对于引脚初始化  void    adc_init(ADCCH_enum ch);</p>
+<p>2.将电感的电压数据转换成数值  uint16  adc_convert(ADCCH_enum ch, ADCRES_enum resolution);</p>
+<p>3.将获取到的5路电感数据滤波，平滑数据。<a href="https://wenku.baidu.com/view/143b5b8000f69e3143323968011ca300a7c3f67f.html" target="_blank" rel="noopener">滤波方式点我</a></p>
+<p>4.设计控制算法：水平电感负责寻迹，斜电感负责判断圆环等元素。</p>
+<p>5.将获取到的电感数据发送到山外上位机，绘制波形，观察元素特征。</p>
+<p><strong>发送数据函数</strong></p>
+<p><code>void vcan_sendware(void *wareaddr, uint32_t waresize)</code><br><code>{</code><br><code>#define CMD_WARE     3</code><br>    <code>uint8_t cmdf[2] = {CMD_WARE, ~CMD_WARE};    //串口调试 使用的前命令</code><br>    <code>uint8_t cmdr[2] = {~CMD_WARE, CMD_WARE};    //串口调试 使用的后命令</code></p>
+<pre><code>uart_putbuff(USART_0, cmdf, sizeof(cmdf));    //先发送前命令
+uart_putbuff(USART_0, (uint8_t *)wareaddr, waresize);    //发送数据
+uart_putbuff(USART_0, cmdr, sizeof(cmdr));    //发送后命令</code></pre><p><code>}</code></p>
+<p><code>**使用方法</code>**</p>
+<p>vcan_sendware((uint8_t *)speed, sizeof(speed));</p>
+<h1 id="电机部分"><a href="#电机部分" class="headerlink" title="电机部分"></a>电机部分</h1><p>1.完成引脚初始化</p>
+<p>2.获取编码器返回值 (参考例程)</p>
+<p>3.参考时光倒流代码里的PID部分，PID的error是设定的速度-编码器实际获得到的速度</p>
+<p>  <code>CAR.Speed_Left_Error_Last2=CAR.Speed_Left_Error_Last;</code><br>  <code>CAR.Speed_Left_Error_Last=CAR.Speed_Left_Error;</code><br>  <code>CAR.Speed_Left_Error=CAR.Speed_Left_Target-CAR.Speed_Left_Real; //左轮设定速度-编码器实际速度</code>  </p>
+<p>  <code>CAR.Speed_Right_Error_Last2=CAR.Speed_Right_Error_Last;</code><br>  <code>CAR.Speed_Right_Error_Last=CAR.Speed_Right_Error;</code><br>  <code>CAR.Speed_Right_Error=CAR.Speed_Right_Target-CAR.Speed_Right_Real;//右轮设定速度-编码器实际速度</code></p>
+<p>  <strong><em>//PID主体</em></strong></p>
+<p><code>CAR.Voltage_Left=(int32)(CAR.Voltage_Left+pid_speed.Kpp*(CAR.Speed_Left_Error-CAR.Speed_Left_Error_Last)+pid_speed.Kii*CAR.Speed_Left_Error+pid_speed.Kdd*(CAR.Speed_Left_Error-2*CAR.Speed_Left_Error_Last+CAR.Speed_Left_Error_Last2));</code><br>  <code>CAR.Voltage_Right=(int32)(CAR.Voltage_Right+pid_speed.Kpp*(CAR.Speed_Right_Error-CAR.Speed_Right_Error_Last)+pid_speed.Kii*CAR.Speed_Right_Error+pid_speed.Kdd*(CAR.Speed_Right_Error-2*CAR.Speed_Right_Error_Last+CAR.Speed_Right_Error_Last2));</code></p>
+<h1 id="摄像头部分"><a href="#摄像头部分" class="headerlink" title="摄像头部分"></a>摄像头部分</h1><p>上述部分做完，感兴趣用摄像头完成车库的判断话，随时联系我</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/07/12/%E6%99%BA%E8%83%BD%E8%BD%A6%E7%94%B5%E7%A3%81/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-text2" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
