@@ -6,17 +6,15 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>智能车电磁 -常更新 | YaNKEEE</title>
+  <title>graduate | YaNKEEE</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="本篇文章一直更新，有问题留言 QQ 1435020085 看到会将问题更新在博客中 电磁部分:1.完成对于引脚初始化  void    adc_init(ADCCH_enum ch); 2.将电感的电压数据转换成数值  uint16  adc_convert(ADCCH_enum ch, ADCRES_enum resolution); 3.将获取到的5路电感数据滤波，平滑数据。滤波方式点我 4.">
-<meta property="og:type" content="article">
-<meta property="og:title" content="智能车电磁 -常更新">
-<meta property="og:url" content="http://yoursite.com/2020/07/12/%E6%99%BA%E8%83%BD%E8%BD%A6%E7%94%B5%E7%A3%81/index.html">
+  <meta property="og:type" content="article">
+<meta property="og:title" content="graduate">
+<meta property="og:url" content="http://yoursite.com/2020/07/16/graduate/index.html">
 <meta property="og:site_name" content="YaNKEEE">
-<meta property="og:description" content="本篇文章一直更新，有问题留言 QQ 1435020085 看到会将问题更新在博客中 电磁部分:1.完成对于引脚初始化  void    adc_init(ADCCH_enum ch); 2.将电感的电压数据转换成数值  uint16  adc_convert(ADCCH_enum ch, ADCRES_enum resolution); 3.将获取到的5路电感数据滤波，平滑数据。滤波方式点我 4.">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2020-07-12T11:52:13.000Z">
-<meta property="article:modified_time" content="2020-07-16T09:19:12.284Z">
+<meta property="article:published_time" content="2020-07-16T08:32:33.000Z">
+<meta property="article:modified_time" content="2020-07-16T08:32:33.697Z">
 <meta property="article:author" content="YanKE">
 <meta name="twitter:card" content="summary">
   
@@ -154,14 +152,14 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-智能车电磁" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-graduate" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      智能车电磁 -常更新
+      graduate
     </h1>
   
 
@@ -172,51 +170,15 @@
               <i class="icon-smile icon"></i> 阅读数：<span id="busuanzi_value_page_pv"></span>次
         </span>
 
-<a href="/2020/07/12/%E6%99%BA%E8%83%BD%E8%BD%A6%E7%94%B5%E7%A3%81/" class="archive-article-date">
-  	<time datetime="2020-07-12T11:52:13.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-07-12</time>
+<a href="/2020/07/16/graduate/" class="archive-article-date">
+  	<time datetime="2020-07-16T08:32:33.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-07-16</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p><u>本篇文章一直更新，有问题留言 QQ 1435020085 看到会将问题更新在博客中</u></p>
-<h1 id="电磁部分"><a href="#电磁部分" class="headerlink" title="电磁部分:"></a>电磁部分:</h1><p>1.完成对于引脚初始化  void    adc_init(ADCCH_enum ch);</p>
-<p>2.将电感的电压数据转换成数值  uint16  adc_convert(ADCCH_enum ch, ADCRES_enum resolution);</p>
-<p>3.将获取到的5路电感数据滤波，平滑数据。<a href="https://wenku.baidu.com/view/143b5b8000f69e3143323968011ca300a7c3f67f.html" target="_blank" rel="noopener">滤波方式点我</a></p>
-<p>4.设计控制算法：水平电感负责寻迹，斜电感负责判断圆环等元素。</p>
-<p>5.将获取到的电感数据发送到山外上位机，绘制波形，观察元素特征。</p>
-<p><strong>发送数据函数</strong></p>
-<p><code>void vcan_sendware(void *wareaddr, uint32_t waresize)</code><br><code>{</code><br><code>#define CMD_WARE     3</code><br>    <code>uint8_t cmdf[2] = {CMD_WARE, ~CMD_WARE};    //串口调试 使用的前命令</code><br>    <code>uint8_t cmdr[2] = {~CMD_WARE, CMD_WARE};    //串口调试 使用的后命令</code></p>
-<pre><code>uart_putbuff(USART_0, cmdf, sizeof(cmdf));    //先发送前命令
-uart_putbuff(USART_0, (uint8_t *)wareaddr, waresize);    //发送数据
-uart_putbuff(USART_0, cmdr, sizeof(cmdr));    //发送后命令</code></pre><p><code>}</code></p>
-<p><code>**使用方法</code>**</p>
-<p>vcan_sendware((uint8_t *)speed, sizeof(speed));</p>
-<h1 id="电机部分"><a href="#电机部分" class="headerlink" title="电机部分"></a>电机部分</h1><p>1.完成引脚初始化</p>
-<p>2.获取编码器返回值 (参考例程)</p>
-<p>3.参考时光倒流代码里的PID部分，PID的error是设定的速度-编码器实际获得到的速度</p>
-<p>  <code>CAR.Speed_Left_Error_Last2=CAR.Speed_Left_Error_Last;</code><br>  <code>CAR.Speed_Left_Error_Last=CAR.Speed_Left_Error;</code><br>  <code>CAR.Speed_Left_Error=CAR.Speed_Left_Target-CAR.Speed_Left_Real; //左轮设定速度-编码器实际速度</code>  </p>
-<p>  <code>CAR.Speed_Right_Error_Last2=CAR.Speed_Right_Error_Last;</code><br>  <code>CAR.Speed_Right_Error_Last=CAR.Speed_Right_Error;</code><br>  <code>CAR.Speed_Right_Error=CAR.Speed_Right_Target-CAR.Speed_Right_Real;//右轮设定速度-编码器实际速度</code></p>
-<p>  <strong><em>//PID主体</em></strong></p>
-<p><code>CAR.Voltage_Left=(int32)(CAR.Voltage_Left+pid_speed.Kpp*(CAR.Speed_Left_Error-CAR.Speed_Left_Error_Last)+pid_speed.Kii*CAR.Speed_Left_Error+pid_speed.Kdd*(CAR.Speed_Left_Error-2*CAR.Speed_Left_Error_Last+CAR.Speed_Left_Error_Last2));</code><br>  <code>CAR.Voltage_Right=(int32)(CAR.Voltage_Right+pid_speed.Kpp*(CAR.Speed_Right_Error-CAR.Speed_Right_Error_Last)+pid_speed.Kii*CAR.Speed_Right_Error+pid_speed.Kdd*(CAR.Speed_Right_Error-2*CAR.Speed_Right_Error_Last+CAR.Speed_Right_Error_Last2));</code></p>
-<h1 id="摄像头部分"><a href="#摄像头部分" class="headerlink" title="摄像头部分"></a>摄像头部分</h1><p>上述部分做完，感兴趣用摄像头完成车库的判断话，随时联系我</p>
-<h1 id="陀螺仪部分"><a href="#陀螺仪部分" class="headerlink" title="陀螺仪部分"></a>陀螺仪部分</h1><p>本次实验采用MPU9250，采用硬件IIC完成通讯。</p>
-<p>基本常识 ω=Δθ/Δt  <a href="https://baike.baidu.com/item/%E8%A7%92%E9%80%9F%E5%BA%A6/1532689?fr=aladdin" target="_blank" rel="noopener">点我了解角加速度</a></p>
-<p>程序初试化:</p>
-<p>自检程序：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;如果程序卡死，一般都死在自检程序</span><br><span class="line">void Self_Check()</span><br><span class="line">&#123;</span><br><span class="line">  iic_write_reg(IIC_1,GYRO_ADDRESS,PWR_MGMT_1,0x00); &#x2F;&#x2F;解除休眠</span><br><span class="line">  iic_write_reg(IIC_1,GYRO_ADDRESS,SMPLRT_DIV, 0x07);</span><br><span class="line">  </span><br><span class="line">  while(0x07 !&#x3D; iic_read_reg(IIC_1, GYRO_ADDRESS, SMPLRT_DIV))&#123;</span><br><span class="line">  </span><br><span class="line">  &#125;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><span style="color:red;background:背景颜色;font-size:文字大小;font-family:字体;">程序卡死一般在自检程序</span></p>
-<p>陀螺仪初始化程序:</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">mpu9250_init_hardware</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  systick_delay_ms(<span class="number">100</span>);<span class="comment">//上电延时</span></span><br><span class="line">  iic_init(IIC_1, IIC_SDA_PIN,IIC_SCL_PIN,<span class="number">400</span>*<span class="number">1000</span>); <span class="comment">//硬件IIC初始化</span></span><br><span class="line">  </span><br><span class="line">  Self_Check();</span><br><span class="line">  </span><br><span class="line">  iic_write_reg(IIC_1,GYRO_ADDRESS,PWR_MGMT_1,<span class="number">0x00</span>); <span class="comment">//解除休眠</span></span><br><span class="line">  iic_write_reg(IIC_1,GYRO_ADDRESS,SMPLRT_DIV, <span class="number">0x07</span>);</span><br><span class="line">  iic_write_reg(IIC_1,GYRO_ADDRESS,CONFIG, <span class="number">0x06</span>);</span><br><span class="line">  </span><br><span class="line">  iic_write_reg(IIC_1,GYRO_ADDRESS,GYRO_CONFIG, <span class="number">0x18</span>);</span><br><span class="line">  iic_write_reg(IIC_1,GYRO_ADDRESS,ACCEL_CONFIG, <span class="number">0x01</span>);</span><br><span class="line">  </span><br><span class="line">  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>角速度读取公式</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//角速度</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">READ_MPU9250_GYRO</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123; </span><br><span class="line"></span><br><span class="line">   BUF[<span class="number">0</span>]=iic_read_reg(IIC_1,GYRO_ADDRESS,GYRO_XOUT_L); </span><br><span class="line">   BUF[<span class="number">1</span>]=iic_read_reg(IIC_1,GYRO_ADDRESS,GYRO_XOUT_H);</span><br><span class="line">   MPU_9250.X_Ang_Vel=	(BUF[<span class="number">1</span>]&lt;&lt;<span class="number">8</span>)|BUF[<span class="number">0</span>];</span><br><span class="line">   MPU_9250.X_Ang_Vel/=<span class="number">16.4</span>; 						   <span class="comment">//读取计算X轴数据</span></span><br><span class="line"></span><br><span class="line">   BUF[<span class="number">2</span>]=iic_read_reg(IIC_1,GYRO_ADDRESS,GYRO_YOUT_L);</span><br><span class="line">   BUF[<span class="number">3</span>]=iic_read_reg(IIC_1,GYRO_ADDRESS,GYRO_YOUT_H);</span><br><span class="line">   MPU_9250.Y_Ang_Vel=	(BUF[<span class="number">3</span>]&lt;&lt;<span class="number">8</span>)|BUF[<span class="number">2</span>];</span><br><span class="line">   MPU_9250.Y_Ang_Vel/=<span class="number">16.4</span>; 						   <span class="comment">//读取计算Y轴数据</span></span><br><span class="line">   BUF[<span class="number">4</span>]=iic_read_reg(IIC_1,GYRO_ADDRESS,GYRO_ZOUT_L);</span><br><span class="line">   BUF[<span class="number">5</span>]=iic_read_reg(IIC_1,GYRO_ADDRESS,GYRO_ZOUT_H);</span><br><span class="line">   MPU_9250.Z_Ang_Vel=	(BUF[<span class="number">5</span>]&lt;&lt;<span class="number">8</span>)|BUF[<span class="number">4</span>];</span><br><span class="line">   MPU_9250.Z_Ang_Vel/=<span class="number">16.4</span>; 					       <span class="comment">//读取计算Z轴数据</span></span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line">   </span><br><span class="line"></span><br><span class="line">  <span class="comment">// BUF[6]=Single_Read(GYRO_ADDRESS,TEMP_OUT_L); </span></span><br><span class="line">  <span class="comment">// BUF[7]=Single_Read(GYRO_ADDRESS,TEMP_OUT_H); </span></span><br><span class="line">  <span class="comment">// T_T=(BUF[7]&lt;&lt;8)|BUF[6];</span></span><br><span class="line">  <span class="comment">// T_T = 35+ ((double) (T_T + 13200)) / 280;// 读取计算出温度</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>其余陀螺仪信息暂时用不到。</p>
-<p><span style="color:red;background:背景颜色;font-size:文字大小;font-family:字体;">对角度积分的过程实际上实在周期中断完成，可以参考isr.c文件</span></p>
-
+        
       
 
       
@@ -300,7 +262,7 @@ uart_putbuff(USART_0, cmdr, sizeof(cmdr));    //发送后命令</code></pre><p><
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2020/07/12/%E6%99%BA%E8%83%BD%E8%BD%A6%E7%94%B5%E7%A3%81/" alt="微信分享二维码">
+      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2020/07/16/graduate/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -314,18 +276,9 @@ uart_putbuff(USART_0, cmdr, sizeof(cmdr));    //发送后命令</code></pre><p><
   
 <nav id="article-nav">
   
-    <a href="/2020/07/14/czy/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          czy
-        
-      </div>
-    </a>
   
-  
-    <a href="/2020/07/10/text2/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">备战2021 毕业设计 持续更新</div>
+    <a href="/2020/07/14/czy/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">czy</div>
       <i class="icon-circle-right"></i>
     </a>
   

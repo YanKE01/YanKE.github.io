@@ -152,6 +152,69 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-graduate" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/07/16/graduate/">graduate</a>
+    </h1>
+  
+
+        
+         
+<a href="/2020/07/16/graduate/" class="archive-article-date">
+  	<time datetime="2020-07-16T08:32:33.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-07-16</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/07/16/graduate/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-czy" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -258,6 +321,21 @@ uart_putbuff(USART_0, cmdr, sizeof(cmdr));    //发送后命令</code></pre><p><
 <p>  <strong><em>//PID主体</em></strong></p>
 <p><code>CAR.Voltage_Left=(int32)(CAR.Voltage_Left+pid_speed.Kpp*(CAR.Speed_Left_Error-CAR.Speed_Left_Error_Last)+pid_speed.Kii*CAR.Speed_Left_Error+pid_speed.Kdd*(CAR.Speed_Left_Error-2*CAR.Speed_Left_Error_Last+CAR.Speed_Left_Error_Last2));</code><br>  <code>CAR.Voltage_Right=(int32)(CAR.Voltage_Right+pid_speed.Kpp*(CAR.Speed_Right_Error-CAR.Speed_Right_Error_Last)+pid_speed.Kii*CAR.Speed_Right_Error+pid_speed.Kdd*(CAR.Speed_Right_Error-2*CAR.Speed_Right_Error_Last+CAR.Speed_Right_Error_Last2));</code></p>
 <h1 id="摄像头部分"><a href="#摄像头部分" class="headerlink" title="摄像头部分"></a>摄像头部分</h1><p>上述部分做完，感兴趣用摄像头完成车库的判断话，随时联系我</p>
+<h1 id="陀螺仪部分"><a href="#陀螺仪部分" class="headerlink" title="陀螺仪部分"></a>陀螺仪部分</h1><p>本次实验采用MPU9250，采用硬件IIC完成通讯。</p>
+<p>基本常识 ω=Δθ/Δt  <a href="https://baike.baidu.com/item/%E8%A7%92%E9%80%9F%E5%BA%A6/1532689?fr=aladdin" target="_blank" rel="noopener">点我了解角加速度</a></p>
+<p>程序初试化:</p>
+<p>自检程序：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;如果程序卡死，一般都死在自检程序</span><br><span class="line">void Self_Check()</span><br><span class="line">&#123;</span><br><span class="line">  iic_write_reg(IIC_1,GYRO_ADDRESS,PWR_MGMT_1,0x00); &#x2F;&#x2F;解除休眠</span><br><span class="line">  iic_write_reg(IIC_1,GYRO_ADDRESS,SMPLRT_DIV, 0x07);</span><br><span class="line">  </span><br><span class="line">  while(0x07 !&#x3D; iic_read_reg(IIC_1, GYRO_ADDRESS, SMPLRT_DIV))&#123;</span><br><span class="line">  </span><br><span class="line">  &#125;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><span style="color:red;background:背景颜色;font-size:文字大小;font-family:字体;">程序卡死一般在自检程序</span></p>
+<p>陀螺仪初始化程序:</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">mpu9250_init_hardware</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  systick_delay_ms(<span class="number">100</span>);<span class="comment">//上电延时</span></span><br><span class="line">  iic_init(IIC_1, IIC_SDA_PIN,IIC_SCL_PIN,<span class="number">400</span>*<span class="number">1000</span>); <span class="comment">//硬件IIC初始化</span></span><br><span class="line">  </span><br><span class="line">  Self_Check();</span><br><span class="line">  </span><br><span class="line">  iic_write_reg(IIC_1,GYRO_ADDRESS,PWR_MGMT_1,<span class="number">0x00</span>); <span class="comment">//解除休眠</span></span><br><span class="line">  iic_write_reg(IIC_1,GYRO_ADDRESS,SMPLRT_DIV, <span class="number">0x07</span>);</span><br><span class="line">  iic_write_reg(IIC_1,GYRO_ADDRESS,CONFIG, <span class="number">0x06</span>);</span><br><span class="line">  </span><br><span class="line">  iic_write_reg(IIC_1,GYRO_ADDRESS,GYRO_CONFIG, <span class="number">0x18</span>);</span><br><span class="line">  iic_write_reg(IIC_1,GYRO_ADDRESS,ACCEL_CONFIG, <span class="number">0x01</span>);</span><br><span class="line">  </span><br><span class="line">  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>角速度读取公式</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//角速度</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">READ_MPU9250_GYRO</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123; </span><br><span class="line"></span><br><span class="line">   BUF[<span class="number">0</span>]=iic_read_reg(IIC_1,GYRO_ADDRESS,GYRO_XOUT_L); </span><br><span class="line">   BUF[<span class="number">1</span>]=iic_read_reg(IIC_1,GYRO_ADDRESS,GYRO_XOUT_H);</span><br><span class="line">   MPU_9250.X_Ang_Vel=	(BUF[<span class="number">1</span>]&lt;&lt;<span class="number">8</span>)|BUF[<span class="number">0</span>];</span><br><span class="line">   MPU_9250.X_Ang_Vel/=<span class="number">16.4</span>; 						   <span class="comment">//读取计算X轴数据</span></span><br><span class="line"></span><br><span class="line">   BUF[<span class="number">2</span>]=iic_read_reg(IIC_1,GYRO_ADDRESS,GYRO_YOUT_L);</span><br><span class="line">   BUF[<span class="number">3</span>]=iic_read_reg(IIC_1,GYRO_ADDRESS,GYRO_YOUT_H);</span><br><span class="line">   MPU_9250.Y_Ang_Vel=	(BUF[<span class="number">3</span>]&lt;&lt;<span class="number">8</span>)|BUF[<span class="number">2</span>];</span><br><span class="line">   MPU_9250.Y_Ang_Vel/=<span class="number">16.4</span>; 						   <span class="comment">//读取计算Y轴数据</span></span><br><span class="line">   BUF[<span class="number">4</span>]=iic_read_reg(IIC_1,GYRO_ADDRESS,GYRO_ZOUT_L);</span><br><span class="line">   BUF[<span class="number">5</span>]=iic_read_reg(IIC_1,GYRO_ADDRESS,GYRO_ZOUT_H);</span><br><span class="line">   MPU_9250.Z_Ang_Vel=	(BUF[<span class="number">5</span>]&lt;&lt;<span class="number">8</span>)|BUF[<span class="number">4</span>];</span><br><span class="line">   MPU_9250.Z_Ang_Vel/=<span class="number">16.4</span>; 					       <span class="comment">//读取计算Z轴数据</span></span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line">   </span><br><span class="line"></span><br><span class="line">  <span class="comment">// BUF[6]=Single_Read(GYRO_ADDRESS,TEMP_OUT_L); </span></span><br><span class="line">  <span class="comment">// BUF[7]=Single_Read(GYRO_ADDRESS,TEMP_OUT_H); </span></span><br><span class="line">  <span class="comment">// T_T=(BUF[7]&lt;&lt;8)|BUF[6];</span></span><br><span class="line">  <span class="comment">// T_T = 35+ ((double) (T_T + 13200)) / 280;// 读取计算出温度</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>其余陀螺仪信息暂时用不到。</p>
+<p><span style="color:red;background:背景颜色;font-size:文字大小;font-family:字体;">对角度积分的过程实际上实在周期中断完成，可以参考isr.c文件</span></p>
 
       
 
